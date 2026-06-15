@@ -1,0 +1,30 @@
+{
+  "brand": {
+    "name": "FAKE GURU",
+    "logo": "",
+    "heroTitle": "YouTube ebooks that <span>deliver.</span>",
+    "heroSub": "Instant delivery after payment confirmation. Wise · PayPal · Crypto.",
+    "copyright": "© 2026 FAKE GURU. All rights reserved."
+  },
+  "contact": {
+    "x": "https://x.com/FakeYTGuru1",
+    "discord": "fakegurux",
+    "supportUrl": "https://x.com/FakeYTGuru1"
+  },
+  "pay": {
+    "paypal": "https://paypal.me/fakeguru1",
+    "wise": "https://wise.com/pay/me/mergimh24",
+    "binancePay": "",
+    "usdt": "",
+    "bnb": "",
+    "eth": ""
+  },
+  "products": [
+    { "id": "yt1", "title": "Youtube 1", "img": "", "price": 9.99,  "stock": null, "badge": "Bestseller", "short": "Your first YouTube ebook.", "desc": "Describe what's inside Youtube 1 here. Edit everything in the admin panel." },
+    { "id": "yt2", "title": "Youtube 2", "img": "", "price": 12.99, "stock": 40,   "badge": "",           "short": "Your second YouTube ebook.", "desc": "Describe what's inside Youtube 2 here." },
+    { "id": "yt3", "title": "Youtube 3", "img": "", "price": 14.99, "stock": 25,   "badge": "New",        "short": "Your third YouTube ebook.", "desc": "Describe what's inside Youtube 3 here." },
+    { "id": "yt4", "title": "Youtube 4", "img": "", "price": 17.99, "stock": null, "badge": "",           "short": "Your fourth YouTube ebook.", "desc": "Describe what's inside Youtube 4 here." },
+    { "id": "yt5", "title": "Youtube 5", "img": "", "price": 19.99, "stock": 10,   "badge": "",           "short": "Your fifth YouTube ebook.", "desc": "Describe what's inside Youtube 5 here." },
+    { "id": "yt6", "title": "Youtube 6", "img": "", "price": 24.99, "stock": 0,    "badge": "-40%",       "short": "Your sixth YouTube ebook.", "desc": "Describe what's inside Youtube 6 here." }
+  ]
+}
