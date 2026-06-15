@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FAKE GURU — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#07070b;--bg-2:#0c0c14;--surface:rgba(255,255,255,.04);--surface-2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.1);--line-2:rgba(255,255,255,.18);--text:#f4f4f8;--muted:#9a9ab0;--faint:#6a6a80;
+    --violet:#7c5cff;--violet-2:#5b3df5;--emerald:#34d399;--rose:#fb7185;--radius:14px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+  h1,h2,h3,button,.tag{font-family:'Space Grotesk',sans-serif}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 120px}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(7,7,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+  .topbar .brand{font-weight:700;font-size:1.05rem;font-family:'Space Grotesk';display:flex;align-items:center;gap:10px}
+  .topbar .brand .dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--violet),var(--violet-2));display:grid;place-items:center;font-size:.8rem}
+  .topbar .right{display:flex;gap:10px;align-items:center}
+  .save{border:none;background:linear-gradient(135deg,var(--violet),var(--violet-2));color:#fff;font-weight:600;padding:11px 20px;border-radius:11px;cursor:pointer;font-size:.9rem}
+  .save:hover{filter:brightness(1.12)}
+  .save:disabled{opacity:.5;cursor:default}
+  .logout{border:1px solid var(--line-2);background:transparent;color:var(--muted);padding:11px 16px;border-radius:11px;cursor:pointer;font-size:.85rem;font-weight:600}
+  .logout:hover{color:var(--text)}
+
+  /* login */
+  .login{min-height:100vh;display:grid;place-items:center;padding:20px}
+  .login .box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line-2);border-radius:18px;padding:34px 30px;text-align:center}
+  .login .dot{width:46px;height:46px;border-radius:13px;margin:0 auto 18px;background:linear-gradient(135deg,var(--violet),var(--violet-2));display:grid;place-items:center;font-weight:700}
+  .login h1{font-size:1.3rem;margin-bottom:6px}
+  .login p{color:var(--muted);font-size:.88rem;margin-bottom:22px}
+  .login input{width:100%;background:var(--bg-2);border:1px solid var(--line-2);border-radius:11px;padding:13px 15px;color:var(--text);font-size:.95rem;margin-bottom:12px;font-family:inherit}
+  .login input:focus{outline:none;border-color:var(--violet)}
+  .login button{width:100%;border:none;background:linear-gradient(135deg,var(--violet),var(--violet-2));color:#fff;font-weight:600;padding:13px;border-radius:11px;cursor:pointer;font-size:.95rem;font-family:'Space Grotesk'}
+  .login .err{color:var(--rose);font-size:.85rem;margin-top:10px;min-height:18px}
+
+  section{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:20px}
+  section h2{font-size:1.05rem;margin-bottom:4px}
+  section .hint{color:var(--faint);font-size:.82rem;margin-bottom:18px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .field input,.field textarea{width:100%;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--text);font-size:.9rem;font-family:inherit}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--violet)}
+  .field textarea{min-height:80px;resize:vertical}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.row{grid-template-columns:1fr}}
+
+  .product{border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:16px;background:var(--bg-2)}
+  .product .phead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .product .phead .tag{font-size:.75rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+  .product .del{border:1px solid var(--line-2);background:transparent;color:var(--faint);font-size:.78rem;padding:6px 12px;border-radius:9px;cursor:pointer;font-weight:600}
+  .product .del:hover{color:var(--rose);border-color:var(--rose)}
+  .pgrid{display:grid;grid-template-columns:120px 1fr;gap:16px}
+  @media(max-width:560px){.pgrid{grid-template-columns:1fr}}
+  .imgbox{aspect-ratio:1;border-radius:11px;border:1px dashed var(--line-2);background:#10101a;display:grid;place-items:center;overflow:hidden;position:relative;cursor:pointer}
+  .imgbox img{width:100%;height:100%;object-fit:cover}
+  .imgbox .ph{color:var(--faint);font-size:.75rem;text-align:center;padding:8px}
+  .imgbox input[type=file]{display:none}
+  .imgbox .up{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;text-align:center;padding:5px;border-radius:7px;font-weight:600}
+  .checkrow{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .checkrow input{width:18px;height:18px;accent-color:var(--violet)}
+  .checkrow label{font-size:.85rem;color:var(--muted)}
+  .addbtn{width:100%;border:1px dashed var(--line-2);background:transparent;color:var(--muted);padding:14px;border-radius:12px;cursor:pointer;font-weight:600;font-size:.9rem;font-family:'Space Grotesk'}
+  .addbtn:hover{color:var(--text);border-color:var(--violet)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#15151f;border:1px solid var(--line-2);color:var(--text);padding:13px 22px;border-radius:12px;font-size:.88rem;font-weight:600;z-index:200;opacity:0;transition:.25s}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{border-color:var(--rose);color:var(--rose)}
+  .stockhint{font-size:.72rem;color:var(--faint);margin-top:4px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+  <div class="box">
+    <div class="dot">🔒</div>
+    <h1>Admin Login</h1>
+    <p>Enter your admin password</p>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password" />
+    <button id="login-btn">Log in</button>
+    <div class="err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <div class="topbar">
+    <div class="brand"><span class="dot">FG</span> Admin</div>
+    <div class="right">
+      <button class="logout" id="logout">Log out</button>
+      <button class="save" id="save">Save changes</button>
+    </div>
+  </div>
+  <div class="wrap">
+
+    <section>
+      <h2>Store settings</h2>
+      <p class="hint">Brand name, headline and your support link (X).</p>
+      <div class="field"><label>Brand name</label><input id="b-name" /></div>
+      <div class="field"><label>Headline (the word in &lt;span&gt; turns purple)</label><input id="b-title" /></div>
+      <div class="field"><label>Subtitle under the headline</label><input id="b-sub" /></div>
+      <div class="field"><label>Footer text</label><input id="b-copy" /></div>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p class="hint">Support shows only your X. Discord is used at checkout so buyers can send the screenshot.</p>
+      <div class="row">
+        <div class="field"><label>X / Twitter link</label><input id="c-x" placeholder="https://x.com/FakeYTGuru1" /></div>
+        <div class="field"><label>Discord username</label><input id="c-discord" placeholder="fakegurux" /></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Payment details</h2>
+      <p class="hint">Shown to the buyer at checkout. Leave a field empty to hide it.</p>
+      <div class="row">
+        <div class="field"><label>PayPal link</label><input id="p-paypal" placeholder="https://paypal.me/fakeguru1" /></div>
+        <div class="field"><label>Wise link</label><input id="p-wise" placeholder="https://wise.com/pay/me/mergimh24" /></div>
+      </div>
+      <div class="field"><label>Binance Pay link (paste a fresh one anytime)</label><input id="p-binance" placeholder="https://app.binance.com/qr/..." /></div>
+      <div class="row">
+        <div class="field"><label>USDT address</label><input id="p-usdt" placeholder="USDT (BEP20/TRC20)" /></div>
+        <div class="field"><label>BNB address</label><input id="p-bnb" placeholder="BNB (BSC)" /></div>
+      </div>
+      <div class="field"><label>ETH address</label><input id="p-eth" placeholder="ETH (ERC20)" /></div>
+    </section>
+
+    <section>
+      <h2>Products</h2>
+      <p class="hint">Upload a cover, set the name, price, stock and badge. Changes go live for everyone after you press “Save changes”.</p>
+      <div id="products"></div>
+      <button class="addbtn" id="add-product">+ Add product</button>
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+let TOKEN=sessionStorage.getItem('fg_token')||"";
+let DATA=null;
+
+/* ---------- LOGIN ---------- */
+async function doLogin(){
+  const pw=$("pw").value;
+  $("login-err").textContent="";
+  try{
+    const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+    if(!r.ok){ $("login-err").textContent="Wrong password."; return; }
+    const j=await r.json(); TOKEN=j.token; sessionStorage.setItem('fg_token',TOKEN);
+    boot();
+  }catch(e){ $("login-err").textContent="Server not reachable."; }
+}
+$("login-btn").onclick=doLogin;
+$("pw").addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+$("logout").onclick=()=>{sessionStorage.removeItem('fg_token');location.reload();};
+
+/* ---------- LOAD ---------- */
+async function boot(){
+  try{
+    const r=await fetch('/api/data',{cache:'no-store'});
+    DATA=await r.json();
+  }catch(e){
+    DATA={brand:{},contact:{},pay:{},products:[]};
+  }
+  $("login").style.display="none";
+  $("app").style.display="block";
+  fill();
+}
+
+function fill(){
+  DATA.brand=DATA.brand||{};DATA.contact=DATA.contact||{};DATA.pay=DATA.pay||{};DATA.products=DATA.products||[];
+  $("b-name").value=DATA.brand.name||"";
+  $("b-title").value=DATA.brand.heroTitle||"";
+  $("b-sub").value=DATA.brand.heroSub||"";
+  $("b-copy").value=DATA.brand.copyright||"";
+  $("c-x").value=DATA.contact.x||"";
+  $("c-discord").value=DATA.contact.discord||"";
+  $("p-paypal").value=DATA.pay.paypal||"";
+  $("p-wise").value=DATA.pay.wise||"";
+  $("p-binance").value=DATA.pay.binancePay||"";
+  $("p-usdt").value=DATA.pay.usdt||"";
+  $("p-bnb").value=DATA.pay.bnb||"";
+  $("p-eth").value=DATA.pay.eth||"";
+  renderProducts();
+}
+
+/* ---------- PRODUCTS ---------- */
+function renderProducts(){
+  $("products").innerHTML=DATA.products.map((p,i)=>`
+    <div class="product" data-i="${i}">
+      <div class="phead"><span class="tag">Product ${i+1}</span><button class="del" data-del="${i}">Delete</button></div>
+      <div class="pgrid">
+        <label class="imgbox" data-img="${i}">
+          ${p.img?`<img src="${p.img}" alt="">`:`<span class="ph">No image<br>click to upload</span>`}
+          <span class="up">Upload</span>
+          <input type="file" accept="image/*" data-file="${i}" />
+        </label>
+        <div>
+          <div class="field"><label>Name</label><input data-f="title" data-i="${i}" value="${(p.title||'').replace(/"/g,'&quot;')}" /></div>
+          <div class="row">
+            <div class="field"><label>Price ($)</label><input type="number" step="0.01" data-f="price" data-i="${i}" value="${p.price!=null?p.price:''}" /></div>
+            <div class="field"><label>Stock</label><input data-f="stock" data-i="${i}" value="${p.stock==null?'':p.stock}" placeholder="empty = unlimited" />
+              <div class="stockhint">empty = unlimited · 0 = out of stock · 25 = shows “In Stock (25)”</div></div>
+          </div>
+          <div class="field"><label>Badge (e.g. Bestseller, New, -40% — empty for none)</label><input data-f="badge" data-i="${i}" value="${(p.badge||'').replace(/"/g,'&quot;')}" /></div>
+          <div class="checkrow"><input type="checkbox" data-bestseller="${i}" ${p.badge==='Bestseller'?'checked':''}/><label>Mark as Bestseller</label></div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Short text (shown on the card)</label><input data-f="short" data-i="${i}" value="${(p.short||'').replace(/"/g,'&quot;')}" /></div>
+      <div class="field"><label>Description (shown when opened)</label><textarea data-f="desc" data-i="${i}">${(p.desc||'').replace(/</g,'&lt;')}</textarea></div>
+    </div>`).join("");
+
+  // text inputs
+  $("products").querySelectorAll('[data-f]').forEach(el=>{
+    el.oninput=()=>{
+      const i=+el.dataset.i, f=el.dataset.f; let v=el.value;
+      if(f==='price') v=parseFloat(v)||0;
+      else if(f==='stock') v = (v.trim()==='') ? null : (parseInt(v,10)||0);
+      DATA.products[i][f]=v;
+    };
+  });
+  // bestseller checkbox
+  $("products").querySelectorAll('[data-bestseller]').forEach(cb=>{
+    cb.onchange=()=>{
+      const i=+cb.dataset.bestseller;
+      if(cb.checked) DATA.products[i].badge='Bestseller';
+      else if(DATA.products[i].badge==='Bestseller') DATA.products[i].badge='';
+      renderProducts();
+    };
+  });
+  // delete
+  $("products").querySelectorAll('[data-del]').forEach(b=>{
+    b.onclick=()=>{ if(confirm('Delete this product?')){ DATA.products.splice(+b.dataset.del,1); renderProducts(); } };
+  });
+  // image upload
+  $("products").querySelectorAll('[data-file]').forEach(inp=>{
+    inp.onchange=async()=>{
+      const i=+inp.dataset.file; const file=inp.files[0]; if(!file) return;
+      toast("Uploading…");
+      const fd=new FormData(); fd.append('image',file);
+      try{
+        const r=await fetch('/api/upload',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN},body:fd});
+        if(!r.ok) throw 0;
+        const j=await r.json(); DATA.products[i].img=j.url; renderProducts(); toast("Image added ✓");
+      }catch(e){ toast("Upload failed",true); }
+    };
+  });
+}
+
+$("add-product").onclick=()=>{
+  DATA.products.push({id:'p'+Date.now(),title:'New ebook',img:'',price:9.99,stock:null,badge:'',short:'',desc:''});
+  renderProducts();
+};
+
+/* ---------- SAVE ---------- */
+function collect(){
+  DATA.brand.name=$("b-name").value;
+  DATA.brand.heroTitle=$("b-title").value;
+  DATA.brand.heroSub=$("b-sub").value;
+  DATA.brand.copyright=$("b-copy").value;
+  if(!('logo' in DATA.brand)) DATA.brand.logo="";
+  DATA.contact.x=$("c-x").value;
+  DATA.contact.discord=$("c-discord").value;
+  DATA.contact.supportUrl=$("c-x").value; // support = X only
+  DATA.pay.paypal=$("p-paypal").value;
+  DATA.pay.wise=$("p-wise").value;
+  DATA.pay.binancePay=$("p-binance").value;
+  DATA.pay.usdt=$("p-usdt").value;
+  DATA.pay.bnb=$("p-bnb").value;
+  DATA.pay.eth=$("p-eth").value;
+}
+$("save").onclick=async()=>{
+  collect();
+  $("save").disabled=true;
+  try{
+    const r=await fetch('/api/data',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},body:JSON.stringify(DATA)});
+    if(!r.ok){ if(r.status===401){toast("Session expired, log in again",true);setTimeout(()=>location.reload(),1200);return;} throw 0; }
+    toast("Saved ✓ — live now");
+  }catch(e){ toast("Save failed",true); }
+  $("save").disabled=false;
+};
+
+let tt;function toast(m,err){const t=$("toast");t.textContent=m;t.className="toast show"+(err?" err":"");clearTimeout(tt);tt=setTimeout(()=>t.className="toast",2000);}
+
+/* auto-login if token still valid */
+if(TOKEN){ boot(); }
+</script>
+</body>
+</html>
